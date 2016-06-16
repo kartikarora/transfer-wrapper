@@ -1,5 +1,6 @@
 import requests
-from flask import Flask, redirect, request, make_response
+from flask import Flask, redirect, request, make_response, jsonify
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -9,24 +10,22 @@ def hello_world():
 	return redirect("https://transfer.sh")
 
 
-@app.route('/upload', methods=['POST', 'PUT'])
-def upload():
+@app.route('/upload/<filename>', methods=['POST', 'PUT'])
+def upload(filename):
 	if request.method == 'POST' or request.method == 'PUT':
-		file = request.files['files']
-		f = file.read()
-		filename = file.filename
-		t = open(filename, "wb+")
-		t.write(f)
-		t.close()
-		print filename
+		filename = secure_filename(filename)
+		fileFullPath = os.path.join("/uploads/", filename)
+		with open(fileFullPath, 'wb+') as f:
+			inp = request.get_data(cache=False, as_text=False, parse_form_data=False)
+			f.write(inp)
 		try:
-			response = requests.put("https://transfer.sh/" + filename, f)
-			return response
+			res = requests.put("https://transfer.sh/" + filename, f)
+			return res
 		except Exception as e:
 			print e
-			return "Something went wrong"
+			return e
 	else:
-		return make_response("Invalid Method")
+		return make_response(jsonify({"error": "Invalid Method"}))
 
 
 if __name__ == '__main__':
