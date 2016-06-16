@@ -12,11 +12,14 @@ def hello_world():
 @app.route('/upload', methods=['POST', 'PUT'])
 def upload():
 	if request.method == 'POST' or request.method == 'PUT':
-		data = request.files['files']
-		file = data.read()
-		name = file.filename
+		file = request.files['image']
+		f = file.read()
+		filename = file.filename
+		t = open("convert_landmark.png", "wb+")
+		t.write(f)
+		t.close()
 		try:
-			response = requests.put("https://transfer.sh/" + name, file)
+			response = requests.put("https://transfer.sh/" + filename, f)
 			return response
 		except Exception as e:
 			print e
