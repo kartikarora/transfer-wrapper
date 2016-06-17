@@ -15,10 +15,12 @@ def hello_world():
 def upload(filename):
 	if request.method == 'POST' or request.method == 'PUT':
 		filename = secure_filename(filename)
-		fileFullPath = os.path.join("/uploads/", filename)
+		fileFullPath = os.path.join("/tmp/", filename)
 		with open(fileFullPath, 'wb+') as f:
 			inp = request.get_data(cache=False, as_text=False, parse_form_data=False)
 			f.write(inp)
+			f.save(fileFullPath)
+			f.close()
 		try:
 			res = requests.put("https://transfer.sh/" + filename, f)
 			return res
