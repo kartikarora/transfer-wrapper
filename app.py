@@ -19,13 +19,13 @@ def upload(filename):
 		with open(fileFullPath, 'wb+') as f:
 			inp = request.get_data(cache=False, as_text=False, parse_form_data=False)
 			f.write(inp)
-			f.close()
 		try:
 			res = requests.put("https://transfer.sh/" + filename, f)
+			f.close()
 			return res
 		except Exception as e:
 			print e
-			return e
+			return make_response(jsonify({"error": "Something Went Wrong"}))
 	else:
 		return make_response(jsonify({"error": "Invalid Method"}))
 
