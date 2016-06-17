@@ -21,8 +21,9 @@ def upload(filename):
 			f.write(inp)
 			try:
 				res = requests.put("https://transfer.sh/" + filename, f)
+				print res.text
 				f.close()
-				return res
+				return res.text
 			except Exception as e:
 				print e
 				return make_response(jsonify({"error": "Something Went Wrong"}))
