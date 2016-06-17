@@ -19,7 +19,6 @@ def upload(filename):
 		with open(fileFullPath, 'wb+') as f:
 			inp = request.get_data(cache=False, as_text=False, parse_form_data=False)
 			f.write(inp)
-			f.save(fileFullPath)
 			f.close()
 		try:
 			res = requests.put("https://transfer.sh/" + filename, f)
