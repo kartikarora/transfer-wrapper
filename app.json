@@ -1,0 +1,6 @@
+{
+  "name": "Transfer.sh Wrapper",
+  "description": "Python + Flask based wrapper API for Transfer.sh service",
+  "repository": "https://github.com/kartikarora/transfer-wrapper",
+  "keywords": ["python", "flask"]
+}
